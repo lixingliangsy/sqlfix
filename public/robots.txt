@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# LLM / AI answer-engine indexing
+LLM-Content: https://sqlfix.lxsaihub.com/llms.txt
+
+Sitemap: https://sqlfix.lxsaihub.com/sitemap.xml

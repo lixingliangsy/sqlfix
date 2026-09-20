@@ -1,0 +1,165 @@
+import React from 'react'
+import Head from 'next/head'
+import { buildFaqJsonLd, buildHowToJsonLd } from '../lib/schema'
+import Layout from '../components/Layout'
+import { PRODUCT } from '../lib/product'
+import { geoPosts } from '../data/geoPosts'
+
+const PGDOCS = 'https://www.postgresql.org/docs/current/'
+const MYSQLDOCS = 'https://dev.mysql.com/doc/'
+const SQLITEDOCS = 'https://www.sqlite.org/docs.html'
+const BQDOCS = 'https://cloud.google.com/bigquery/docs'
+const OWASP = 'https://owasp.org/Top10/A03_2021-Injection/'
+
+const posts = [
+  {
+    slug: 'what-is-sqlfix',
+    title: 'What is SQLFix? Natural-language to SQL with a safety screen',
+    type: 'Definitional · FAQPage',
+    query: 'what is SQLFix',
+    body: 'SQLFix turns a plain-English question into a dialect-aware SQL query with a plain explanation, then screens it with a deterministic safety ruleset for injection, unguarded writes, and dialect errors. It is a drafting and review aid, not a guarantee of correctness.',
+    refs: [PGDOCS, OWASP],
+  },
+  {
+    slug: 'write-sql-from-plain-english',
+    title: 'How to write SQL from plain English',
+    type: 'How-to · HowTo',
+    query: 'how to write SQL from plain English',
+    body: 'Describe your question, optionally paste a schema, pick a dialect (Postgres/MySQL/SQLite/BigQuery), read the explanation, and review the safety findings before copying. The screen flags destructive and injectable patterns; it does not guarantee the query is right.',
+    refs: [MYSQLDOCS],
+  },
+  {
+    slug: 'common-sql-ai-mistakes',
+    title: 'Common mistakes in AI-generated SQL',
+    type: 'Definitional + examples',
+    query: 'common mistakes in AI generated SQL',
+    body: 'The recurring errors are a write with no WHERE, SQL injection from string concatenation, wrong dialect syntax, and ambiguous joins. SQLFix flags the dangerous ones; review still matters because it does not guarantee business-logic correctness.',
+    refs: [OWASP, PGDOCS],
+  },
+  {
+    slug: 'sql-generator-tools-guide',
+    title: 'SQL generator tools: a practical guide',
+    type: 'How-to · HowTo',
+    query: 'best SQL generator tools',
+    body: 'Pick on dialect support, plain-English explanation, safety screening, and exportable audit. A deterministic screen that flags unguarded UPDATE/DELETE is the dimension free chat drafts skip — and the one that matters near production data.',
+    refs: [SQLITEDOCS, BQDOCS],
+  },
+  {
+    slug: 'sqlfix-faq-roundup',
+    title: 'SQLFix FAQ: dialects, safety, and review',
+    type: 'Definitional · FAQPage',
+    query: 'SQLFix FAQ',
+    body: 'Straight answers on supported dialects (Postgres/MySQL/SQLite/BigQuery), how the safety ruleset flags injection and unguarded writes, the free tier, and when a qualified reviewer should still own the run.',
+    refs: [PGDOCS],
+  },
+]
+
+const faqs = [
+  {
+    "question": "What is SQLFix?",
+    "answer": "SQLFix turns a plain-English question into a dialect-aware SQL query with a plain explanation, then screens it with a deterministic safety ruleset for injection, unguarded writes, and dialect errors. It is decision-support, not a guarantee of correctness."
+  },
+  {
+    "question": "Which SQL dialects does SQLFix support?",
+    "answer": "SQLFix supports PostgreSQL, MySQL, SQLite, and BigQuery. You choose the dialect per query and the output is written to match that engine's syntax."
+  },
+  {
+    "question": "Does SQLFix guarantee a query is safe to run?",
+    "answer": "No. SQLFix flags known-dangerous patterns such as injection-prone construction and UPDATE/DELETE without a guard, but it does not guarantee the query is correct, optimal, or safe for your schema. A human should still review anything that writes or deletes data."
+  },
+  {
+    "question": "Do I need to know SQL to use SQLFix?",
+    "answer": "No. SQLFix is built for people who can describe what they want in English but do not want to write the SQL by hand. Reading the explanation helps you learn, but you do not need prior SQL knowledge to start."
+  },
+  {
+    "question": "When should a qualified reviewer still check the query?",
+    "answer": "Anything that writes, deletes, or alters production data should be reviewed by a qualified person before it runs, especially on large or shared tables. SQLFix can help you draft and screen, but it does not replace that review."
+  }
+] as { question: string; answer: string }[]
+
+const howToBlocks = [
+  {
+    "name": "How to write SQL from plain English",
+    "steps": [
+      {
+        "name": "Overview",
+        "text": "Describe your question, optionally paste a schema, pick a dialect (Postgres/MySQL/SQLite/BigQuery), read the explanation, and review the safety findings before copying. The screen flags destructive and injectable patterns; it does not guarantee the query is right."
+      }
+    ]
+  },
+  {
+    "name": "SQL generator tools: a practical guide",
+    "steps": [
+      {
+        "name": "Overview",
+        "text": "Pick on dialect support, plain-English explanation, safety screening, and exportable audit. A deterministic screen that flags unguarded UPDATE/DELETE is the dimension free chat drafts skip — and the one that matters near production data."
+      }
+    ]
+  },
+  {
+    "name": "Common mistakes in AI-generated SQL",
+    "steps": [
+      {
+        "name": "Overview",
+        "text": "The recurring errors are a write with no WHERE, SQL injection from string concatenation, wrong dialect syntax, and ambiguous joins. SQLFix flags the dangerous ones; review still matters because it does not guarantee business-logic correctness."
+      }
+    ]
+  }
+] as { name: string; steps: { name: string; text: string }[] }[]
+
+export default function BlogPage() {
+  return (
+    <Layout>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
+        />
+        {howToBlocks.map((block, i) => (
+          <script
+            key={`howto-${i}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(buildHowToJsonLd(block.name, block.steps)),
+            }}
+          />
+        ))}
+
+        <title>{`${PRODUCT.name} — Blog`}</title>
+        <meta name="description" content="Definitional and how-to posts on natural-language-to-SQL, dialect-aware query generation, and deterministic SQL safety screening — the questions teams ask before they let an AI write a query." />
+      </Head>
+      <div className="max-w-3xl">
+        <div className="text-xs font-bold tracking-widest uppercase text-indigo-600 mb-3">Blog · GEO</div>
+        <h1 className="text-4xl font-extrabold tracking-tight mb-4">Natural-language SQL, explained</h1>
+        <p className="text-lg text-slate-600 mb-10">Own the definitional queries teams ask before they turn a plain-English question into something an AI actually runs against a database.</p>
+
+        <div className="space-y-8">
+          {posts.map((p) => (
+            <article key={p.slug} className="border-b border-slate-200 pb-8">
+              <div className="text-xs font-semibold text-indigo-600 mb-1">{p.type}</div>
+              <h2 className="text-2xl font-bold mb-2 text-slate-900">{p.title}</h2>
+              <p className="text-sm text-slate-600 mb-2"><span className="font-semibold">Target query:</span> {p.query}</p>
+              <p className="text-slate-700 leading-relaxed">{p.body}</p>
+              <p className="text-xs text-slate-400 mt-3">refs: {p.refs.join(' · ')}</p>
+            </article>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-bold mt-14 mb-2 text-slate-900">Deep-dives (GEO)</h2>
+        <p className="text-sm text-slate-500 mb-6">Long-form, cited explainers. Each carries 2+ authoritative SQL / database sources and a decision-support disclaimer.</p>
+        <div className="space-y-5">
+          {geoPosts.map((p) => (
+            <div key={p.slug} className="border-b border-slate-200 pb-5">
+              <h3 className="text-xl font-semibold">
+                <a href={`/blog/${p.slug}`} className="text-indigo-700 hover:underline">{p.title}</a>
+              </h3>
+              <p className="text-sm text-slate-600 mt-1">{p.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-xs text-slate-400 mt-8">Publish + syndicate per gtm-launch (IH + GEO indexes). Each post carries 2+ authoritative refs.</p>
+      </div>
+    </Layout>
+  )
+}

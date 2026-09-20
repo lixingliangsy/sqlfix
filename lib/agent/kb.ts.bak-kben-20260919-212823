@@ -1,0 +1,198 @@
+/**
+ * lib/agent/kb.ts —— SQLFix 产品知识库（AI 客服智能体检索源）
+ *
+ * 采用「关键词 + 中文二元组」轻量检索结构。
+ *
+ * 红线：
+ * - 客服应答必须引用 KB 出处；合规类条目须打 tag，由 guardrails 在答案上附加声明。
+ */
+
+import type { KbEntry } from "../support-kit/types";
+export type { KbEntry };
+
+export const KB: KbEntry[] = [
+  {
+    id: "overview",
+    title: "SQLFix 是什么",
+    keywords: ["是什么", "介绍", "sqlfix", "产品", "做什么", "功能", "nl2sql"],
+    body:
+      "SQLFix 是一款自然语言转 SQL（NL2SQL）的安全工具。你用中文或英文描述数据需求，工具生成正确的 SQL 查询（支持 PostgreSQL/MySQL/SQLite/BigQuery），并附带通俗解释。每条 SQL 经过确定性安全规则集检测，过滤 SQL 注入、无 WHERE 的 DROP/DELETE、危险 UPDATE 等风险。",
+    source: "产品文档 / 官网",
+    tags: [],
+  },
+  {
+    id: "dialects",
+    title: "支持的数据库方言",
+    keywords: ["方言", "数据库", "postgres", "mysql", "sqlite", "bigquery", "dialect", "支持"],
+    body:
+      "SQLFix 支持四种主流数据库方言：PostgreSQL、MySQL、SQLite、BigQuery。在工具界面的「Dialect」下拉菜单中选择即可。不同方言的 SQL 语法差异会在生成时自动适配。",
+    source: "产品文档 / 功能",
+    tags: [],
+  },
+  {
+    id: "how-it-works",
+    title: "SQLFix 工作流程",
+    keywords: ["怎么用", "流程", "步骤", "使用", "操作", "工作原理", "how"],
+    body:
+      "三步使用：① 可选输入表结构/schema（如 users(id, name, created_at)），帮助生成更精准的 SQL；② 用自然语言描述需求（如「2025 年每个付费用户的总消费」）；③ 选择数据库方言后点击「Generate SQL」。系统会生成 SQL + 解释 + 安全检测结果。",
+    source: "产品文档 / 上手指南",
+    tags: [],
+  },
+  {
+    id: "sql-safety-rules",
+    title: "SQL 安全规则集",
+    keywords: ["安全", "规则", "检测", "注入", "sql注入", "防护", "DROP", "DELETE", "UPDATE"],
+    body:
+      "SQLFix 使用确定性安全规则集（sql-safety@2026-07-19.3）对每条生成的 SQL 进行检测：① SQL 注入模式识别（UNION SELECT、OR 1=1 等）；② 无 WHERE 条件的 DROP/DELETE；③ 无 WHERE 条件的危险 UPDATE；④ 语法有效性检查。检测结果会标注在输出中。",
+    source: "产品文档 / 安全",
+    tags: ["compliance"],
+  },
+  {
+    id: "pricing",
+    title: "SQLFix 定价：Free / Pro / Enterprise",
+    keywords: ["定价", "价格", "多少钱", "收费", "免费", "pro", "enterprise", "套餐", "档位", "plan"],
+    body:
+      "三档定价：Free（$0，每天 5 次流程运行，导出带水印）；Pro（$19/月或 $190/年，每月 300 次运行，审计日志，JSON/CSV 导出，无水印）；Enterprise（按需，SSO/BYOK/更高配额/共享规则集）。",
+    source: "官网定价页",
+    tags: [],
+  },
+  {
+    id: "billing",
+    title: "账单与订阅管理",
+    keywords: ["账单", "订阅", "付费", "付款", "续费", "退款", "发票", "billing", "subscription"],
+    body:
+      "订阅通过 Waffo 处理。可在「设置」页面查看使用量和管理订阅。如需退款或账单问题，请通过反馈页或联系人工客服，我们会在 1-2 个工作日内处理。",
+    source: "产品文档 / 账单",
+    tags: [],
+  },
+  {
+    id: "ai-support-scope",
+    title: "AI 客服能做什么 / 不能做什么",
+    keywords: ["客服", "机器人", "ai 客服", "智能体", "能回答", "边界", "限制", "范围"],
+    body:
+      "我是 SQLFix 的 AI 客服助手，基于产品知识库回答关于 NL2SQL 功能、数据库方言、安全规则、定价、账户与工具使用的常见问题，并在需要时为你转接人工。我无法修改你的账户、处理退款或访问支付凭证；数据库架构建议请联系专业 DBA。",
+    source: "产品文档 / AI 客服",
+    tags: [],
+  },
+  {
+    id: "account-login",
+    title: "登录 / 账户问题",
+    keywords: ["登录", "登入", "账号", "账户", "注册", "密码", "忘记密码", "无法登录", "account"],
+    body:
+      "账户使用邮箱登录。如需重置密码或无法登录，请在「联系我们 / 转人工」入口提交，团队会协助核实身份后处理。出于安全考虑，我们不会在聊天中直接索要或重置密码。",
+    source: "产品文档 / 账户",
+    tags: [],
+  },
+  {
+    id: "byok",
+    title: "BYOK 自带 API Key",
+    keywords: ["byok", "api key", "自带", "bring your own", "密钥", "key"],
+    body:
+      "Enterprise 及以上套餐支持 BYOK（Bring Your Own Key），你可以使用自己的 API Key 调用模型。设置页面可配置。Pro 用户使用平台统一配额。",
+    source: "产品文档 / 集成",
+    tags: [],
+  },
+  {
+    id: "audit-log",
+    title: "审计日志与导出",
+    keywords: ["审计", "日志", "导出", "audit", "log", "export", "报告"],
+    body:
+      "每次生成 SQL 都会记录审计日志（含 runId、时间、输入、输出、安全检测结果）。Pro 及以上套餐可导出 JSON/CSV 格式的审计报告，便于团队协作与合规留存。",
+    source: "产品文档 / 功能",
+    tags: [],
+  },
+  {
+    id: "compliance-disclaimer",
+    title: "合规答复的免责声明",
+    keywords: ["法律", "意见", "保证", "合规", "免责", "顾问", "责任", "disclaimer"],
+    body:
+      "关于数据库安全、合规性等话题，SQLFix 提供的是 SQL 层面的安全检测与信息梳理，不构成数据库架构、DBA 或合规认证意见。正式决策前请结合实际情况并咨询合格专业人士。",
+    source: "产品文档 / 免责声明",
+    tags: ["compliance"],
+  },
+  {
+    id: "contact-human",
+    title: "联系我们 / 转人工",
+    keywords: ["联系", "人工", "转人工", "投诉", "退款", "维权", "销售", "真人", "客服", "电话", "找人"],
+    body:
+      "需要人工协助（账户异常、退款、商务合作、企业采购或技术咨询）请告诉我「转人工」并留下邮箱；也可在反馈页（/feedback）提交详细诉求。我们的团队会在 1-2 个工作日内回复。",
+    source: "产品文档 / 支持",
+    tags: [],
+  },
+  {
+    id: "schema-input",
+    title: "如何输入表结构/Schema",
+    keywords: ["schema", "表结构", "输入", "表", "字段", "table", "column"],
+    body:
+      "在「Table / schema」输入框中，用简洁格式描述你的表结构，如：users(id, name, email, created_at); orders(id, user_id, total, status)。这能让 SQLFix 生成更准确、更贴合你实际数据库的查询。",
+    source: "产品文档 / 使用技巧",
+    tags: [],
+  },
+  {
+    id: "safety-report",
+    title: "安全检测报告解读",
+    keywords: ["报告", "解读", "安全", "检测", "结果", "report", "flag", "warning"],
+    body:
+      "安全检测报告包含：① 是否检测到注入模式；② 是否存在无 WHERE 的 DROP/DELETE；③ 是否存在无 WHERE 的 UPDATE；④ 语法有效性。标记为 ⚠️ 的项需要人工复核后再使用。",
+    source: "产品文档 / 安全",
+    tags: ["compliance"],
+  },
+  {
+    id: "use-cases",
+    title: "SQLFix 典型使用场景",
+    keywords: ["场景", "案例", "use case", "应用", "数据分析", "报表", "运营"],
+    body:
+      "典型场景：① 数据分析师快速生成报表 SQL；② 创业者/开发者不熟悉 SQL 语法时的辅助；③ 数据库迁移时的查询生成；④ 学习 SQL 的教学辅助；⑤ 日常运营数据提取。",
+    source: "产品文档 / 用例",
+    tags: [],
+  },
+];
+
+function normalize(s: string): string {
+  return (s || "").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ");
+}
+function toWords(s: string): string[] {
+  return normalize(s).split(/\s+/).map((w) => w.trim()).filter(Boolean);
+}
+function cjkBigrams(s: string): string[] {
+  const grams: string[] = [];
+  for (const w of toWords(s)) {
+    if (/[\u4e00-\u9fff]/.test(w) && w.length >= 2) {
+      for (let i = 0; i < w.length - 1; i++) grams.push(w.slice(i, i + 2));
+    }
+  }
+  return grams;
+}
+function scoreEntry(entry: KbEntry, query: string): number {
+  const q = normalize(query);
+  const qWords = new Set(toWords(q));
+  const qGrams = new Set(cjkBigrams(q));
+  let score = 0;
+  for (const kw of entry.keywords) {
+    const k = kw.toLowerCase();
+    if (q.includes(k)) score += 3;
+  }
+  for (const tw of toWords(entry.title)) {
+    if (qWords.has(tw)) score += 2;
+  }
+  const idx = normalize((entry.keywords.join(" ") + " " + entry.title + " " + entry.body.slice(0, 400)));
+  for (const g of qGrams) if (idx.includes(g)) score += 0.5;
+  return score;
+}
+
+export interface RetrieveResult {
+  entries: KbEntry[];
+  topScore: number;
+}
+
+export function retrieve(query: string, topK = 4, entries: KbEntry[] = KB): RetrieveResult {
+  const scored = entries.map((e) => ({ e, s: scoreEntry(e, query) }))
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, topK);
+  return { entries: scored.map((x) => x.e), topScore: scored.length ? scored[0].s : 0 };
+}
+
+export function isComplianceRelated(entries: KbEntry[]): boolean {
+  return entries.some((e) => e.tags.includes("compliance"));
+}

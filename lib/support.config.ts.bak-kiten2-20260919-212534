@@ -1,0 +1,12 @@
+import { KB } from "./agent/kb";
+import type { SupportConfig } from "./support-kit/types";
+
+export const SUPPORT: SupportConfig = {
+  productSlug: "sqlfix",
+  productName: "SQLFix",
+  feedbackEmail: process.env.FEEDBACK_TO_EMAIL || "lixingliangsy@163.com",
+  kb: KB,
+  chatHost: process.env.APP_URL || "https://sqlfix.example.com",
+  brandColor: "#2563EB",
+  complianceDisclaimer: "本助手提供 SQL 安全辅助，不构成数据库架构或合规认证建议。",
+};

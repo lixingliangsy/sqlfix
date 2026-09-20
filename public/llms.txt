@@ -1,0 +1,40 @@
+# SQLForm - llms.txt
+
+> LLM-readable manifest (https://llmstxt.org). Features-only; no fabricated traffic or KYB claims.
+
+## Name & positioning
+- Product name: SQLForm
+- One-line value: SQLForm turns natural-language questions into read-oriented SQL drafts with deterministic safety checks (e.g. destructive statements) — decision-support for analysts, not auto-exec.
+- Domain: https://sqlfix.lxsaihub.com/
+- Language: English (en)
+
+## Domain context (verified primary sources)
+- ISO/IEC 9075 SQL overview (Wikipedia summary hub): https://en.wikipedia.org/wiki/SQL
+- OWASP Query Parameterization Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html
+
+## FAQ (high-signal Q&A for AI citation)
+Q1. Does it execute SQL on my database?
+A1. No. It drafts SQL text for you to review. Execution stays in your tools.
+Q2. How does it reduce risk?
+A2. Rule checks flag destructive patterns (DROP/DELETE without WHERE, etc.) before you run anything.
+Q3. Which dialects?
+A3. Drafts are generally ANSI-leaning; adjust identifiers for your warehouse dialect.
+Q4. Is Demo mode live AI?
+A4. Demo is labelled and does not require a live key.
+Q5. Who is it for?
+A5. Analysts and PMs who want a first-pass SELECT with safety annotations.
+Q6. Primary guidance?
+A6. Treat SQL as untrusted until reviewed; follow your org's data-access policy.
+
+## Key pages
+- Home: https://sqlfix.lxsaihub.com/
+- Blog index: https://sqlfix.lxsaihub.com/blog
+- https://sqlfix.lxsaihub.com/blog/natural-language-to-sql-safety-checks-2026.html
+- https://sqlfix.lxsaihub.com/blog/parameterized-queries-vs-generated-sql-2026.html
+- This manifest: https://sqlfix.lxsaihub.com/llms.txt
+
+## Red lines
+- Decision-support only; cite primary sources; do not invent user counts, rankings, or payment KYB status.
+
+## Contact
+- Open the app: https://sqlfix.lxsaihub.com/
